@@ -6,7 +6,7 @@ This repository contains resources for fine-tuning large language models (LLMs) 
 
 ```
 ├── data/                     # Training and evaluation datasets
-│   └── h3_api_examples.jsonl # Curated examples of modern H3 usage
+│   └── h3_api_examples.json # Curated examples of modern H3 usage
 ├── configs/                  # Axolotl configuration files
 │   └── h3_lora_qlora.yml
 ├── scripts/                  # Helper scripts for dataset prep and model training
@@ -25,24 +25,33 @@ This repository contains resources for fine-tuning large language models (LLMs) 
    pip install -r requirements.txt
    ```
 
-2. Prepare your dataset by placing JSON Lines files in `data/` and running:
+2. Prepare your dataset and create train/validation splits:
    ```bash
-   python scripts/prepare_dataset.py --input data/h3_api_examples.jsonl
+   python scripts/prepare_dataset.py \
+       --input data/h3_api_examples.json \
+       --out_dir data/tokenised
    ```
 
-3. Train with Axolotl using the configuration in `configs/h3_lora_qlora.yml`:
+3. Fine‑tune the base model with LoRA or QLoRA:
    ```bash
-   axolotl train configs/h3_lora_qlora.yml
+   accelerate launch scripts/train.py \
+       --model mistralai/Mistral-7B-v0.3 \
+       --dataset_path data/tokenised \
+       --output_dir checkpoints/h3-lora \
+       --qlora
    ```
 
-4. After training, merge LoRA weights and export formats (GGUF or Safetensors):
+4. Merge the LoRA weights back into the base model and save in `merged/`:
    ```bash
-   python scripts/merge_and_pack.py --config configs/h3_lora_qlora.yml
+   python scripts/merge_and_pack.py \
+       --base_model mistralai/Mistral-7B-v0.3 \
+       --lora_dir checkpoints/h3-lora \
+       --out_dir merged/h3-v4
    ```
 
-5. Evaluate the model on the Code-Eval subset:
+5. Evaluate the merged model on a code benchmark:
    ```bash
-   bash eval/run_lm_eval.sh
+   bash eval/run_lm_eval.sh merged/h3-v4
    ```
 
 ## Contributing
