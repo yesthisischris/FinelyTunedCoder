@@ -1,1 +1,52 @@
-{"prompt": "What does the H3 v4 function do?", "completion": "The `h3` package v4 introduces ..."}
+[
+  {
+    "system": "You are an expert tutor on the H3 v4 API.",
+    "user": "Convert the following H3\u2011v3 Python code to its H3\u2011v4 equivalent:\n\n```python\nfrom h3 import h3\ncenter = h3.geo_to_h3(37.775938728915946, -122.41795063018799, 9)\nring = h3.hex_ring(center, 2)\n```",
+    "assistant": "```python\nfrom h3 import h3\n# v3 geo_to_h3 \u279c v4 latlng_to_cell\ncenter = h3.latlng_to_cell(37.775938728915946, -122.41795063018799, 9)\n# v3 hex_ring \u279c v4 grid_ring_unsafe (same behaviour but renamed)\nring = h3.grid_ring_unsafe(center, 2)\n```"
+  },
+  {
+    "system": "You are an expert tutor on the H3 v4 API.",
+    "user": "What name replaced `h3_is_valid` in H3 version\u202f4?",
+    "assistant": "`is_valid_cell`"
+  },
+  {
+    "system": "You are an expert tutor on the H3 v4 API.",
+    "user": "Update this snippet for H3\u2011v4:\n\n```python\nfrom h3 import h3\narea = h3.hex_area_km2(9)\n```",
+    "assistant": "```python\nfrom h3 import h3\n# hex_area_km2 \u279c get_hexagon_area_avg_km2\narea = h3.get_hexagon_area_avg_km2(9)\n```"
+  },
+  {
+    "system": "You are an expert tutor on the H3 v4 API.",
+    "user": "Replace deprecated functions in this H3\u2011v3 call chain:\n\n```python\nparent = h3.h3_to_parent(index, 7)\nchildren = h3.h3_to_children(parent, 8)\n```",
+    "assistant": "```python\nparent = h3.cell_to_parent(index, 7)\nchildren = h3.cell_to_children(parent, 8)\n```"
+  },
+  {
+    "system": "You are an expert tutor on the H3 v4 API.",
+    "user": "In H3\u2011v4, which function supersedes `polyfill`?",
+    "assistant": "`polygon_to_cells`"
+  },
+  {
+    "system": "You are an expert tutor on the H3 v4 API.",
+    "user": "Convert this distance example to v4 terminology:\n\n```python\ndist = h3.h3_distance(origin, destination)\n```",
+    "assistant": "Use `grid_distance`: `dist = h3.grid_distance(origin, destination)`"
+  },
+  {
+    "system": "You are an expert tutor on the H3 v4 API.",
+    "user": "Which v4 function returns the Icosahedron faces that intersect a cell?",
+    "assistant": "Use `get_icosahedron_faces(cell)` \u2014 this replaces `h3_get_faces`."
+  },
+  {
+    "system": "You are an expert tutor on the H3 v4 API.",
+    "user": "Update the following v3 style for v4:\n\n```python\nlinked_geo = h3.h3_set_to_linked_geo(h3_indexes)\n```",
+    "assistant": "```python\nlinked_geo = h3.cells_to_linked_multi_polygon(h3_indexes)\n```"
+  },
+  {
+    "system": "You are an expert tutor on the H3 v4 API.",
+    "user": "Change this k\u2011ring example to the new grid API:\n\n```python\nneighbors = h3.k_ring(index, 1)\n```",
+    "assistant": "```python\nneighbors = h3.grid_disk(index, 1)\n```"
+  },
+  {
+    "system": "You are an expert tutor on the H3 v4 API.",
+    "user": "How do I compute the great\u2011circle distance in metres in v4?",
+    "assistant": "Call `great_circle_distance_m(lat_lng_a, lat_lng_b)`."
+  }
+]
