@@ -1,0 +1,7 @@
+# Example Axolotl config for LoRA/QLoRA fine-tuning
+base_model: path/to/base/model
+output_dir: ./outputs/h3
+peft:
+  r: 8
+  lora_alpha: 16
+  lora_dropout: 0.1
